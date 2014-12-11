@@ -69,24 +69,31 @@ class Pcc {
 		} else 
 			return - 1;
 		$url = self::$baseServiceUrl . sprintf ( self::$queryServiceUrl, $currencyQueryParameter );
-		$serviceResult = simplexml_load_string ( self::webServiceCall ( $url ) );
-		foreach ( $serviceResult->results->rate as $rateKey => $rate ) {
-			foreach ( $convert as $k => $c ) {
-				if (( string ) $rate ['id'] == $c [0] . $c [1]) {
-					$result [$k] ['From'] = $c [0];
-					$result [$k] ['To'] = $c [1];
-					$result [$k] ['Value'] = $c [2];
-					$result [$k] ['Rate'] = ( float ) $rate->Rate;
-					$result [$k] ['Date'] = ( string ) $rate->Date;
-					$result [$k] ['Time'] = ( string ) $rate->Time;
-					$result [$k] ['ConvertedValue'] = $c [2] * ( float ) $rate->Rate;
-				} else {
-					$result [$k] ['From'] = $c [0];
-					$result [$k] ['To'] = $c [1];
-					$result [$k] ['Value'] = $c [2];
+		$serviceResult = simplexml_load_string ( self::webServiceCall ( $url."..." ) );
+
+		
+		if(!$serviceResult->results->rate){
+		        return $result['Error']='Opps!, something went wrong.';
+		}else{
+			foreach ( $serviceResult->results->rate as $rateKey => $rate ) {
+				foreach ( $convert as $k => $c ) {
+					if (( string ) $rate ['id'] == $c [0] . $c [1]) {
+						$result [$k] ['From'] = $c [0];
+						$result [$k] ['To'] = $c [1];
+						$result [$k] ['Value'] = $c [2];
+						$result [$k] ['Rate'] = ( float ) $rate->Rate;
+						$result [$k] ['Date'] = ( string ) $rate->Date;
+						$result [$k] ['Time'] = ( string ) $rate->Time;
+						$result [$k] ['ConvertedValue'] = $c [2] * ( float ) $rate->Rate;
+					} else {
+						$result [$k] ['From'] = $c [0];
+						$result [$k] ['To'] = $c [1];
+						$result [$k] ['Value'] = $c [2];
+					}
 				}
 			}
 		}
+		
 		foreach ( $result as &$r ) {
 			if (! isset ( $r ['ConvertedValue'] )) {
 				$r ['Rate'] = "undefined";
@@ -114,5 +121,5 @@ class Pcc {
 		curl_close ( $ch );
 		return $return;
 	}
-	?>
 }
+?>
