@@ -112,9 +112,9 @@ class Pcc {
 	 */
 	static private function webServiceCall($url) {
 		$ch = curl_init ( $url );
-		curl_setopt ( $ch, CURLOPT_PROXY, "http://proxysogei.sogei.it" );
+		curl_setopt ( $ch, CURLOPT_PROXY, "http://yourProxy.proxy.com" );
 		curl_setopt ( $ch, CURLOPT_PROXYPORT, 8080 );
-		curl_setopt ( $ch, CURLOPT_PROXYUSERPWD, "domus/emoretti:Password1" );
+		curl_setopt ( $ch, CURLOPT_PROXYUSERPWD, "username:Password" );
 		curl_setopt ( $ch, CURLOPT_URL, $url );
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
 		$return = curl_exec ( $ch );
